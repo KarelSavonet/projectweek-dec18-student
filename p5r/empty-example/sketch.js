@@ -30,7 +30,7 @@ function setup() {
 			grid[rij][kolom] = {};
 			random = Math.floor(aantalKleuren*Math.random());
 			grid[rij][kolom].kleur = kleuren[random];
-			grid[rij][kolom].position = {x:kolom*(lengteCel+gridGap)+lengteCel,y:rij*(lengteCel+gridGap)+lengteCel};
+			grid[rij][kolom].position = {x:kolom, y:rij};
 			grid[rij][kolom].actief = false;
 		}
     }
@@ -40,19 +40,39 @@ function draw() {
   // put drawing code here
     for (let rij = 0; rij<aantalKolommen; rij++){
         for (let kolom=0; kolom<aantalKolommen; kolom++){
-			let x = grid[rij][kolom].position.x;
-			let y = grid[rij][kolom].position.y;
+			let x = positionInPixels(kolom);
+			let y = positionInPixels(rij);
 			fill(grid[rij][kolom].kleur)
-			stroke(0);
+			if (grid[rij][kolom].actief){
+				strokeWeight(3);
+				stroke(51);
+			}
+			else{
+				strokeWeight(1);
+			}
 			rect(x,y,lengteCel,lengteCel);
 		}
     }
 }
 
+function positionInPixels(rijOfKolom){
+	return rijOfKolom*(lengteCel+gridGap)+lengteCel;
+}
+
 function mousePressed(){
 	for(let rij=0; rij<aantalRijen; rij++){
 		for(let kolom=0; kolom<aantalKolommen; kolom++){
-            grid[rij][kolom].kleur = yellow;
+            if ((mouseX > positionInPixels(kolom) && mouseX < positionInPixels(kolom)+lengteCel) && (mouseY > positionInPixels(rij) && mouseY < positionInPixels(rij)+lengteCel)){
+            	grid[rij][kolom].actief = true;
+			}
 		}
 	}
+
+}
+
+function isBuur(grid, vak1,vak2){
+    let horizontaleBuur = (vak1.position.x+1 === vak2.position.x || vak1.position.x -1 === vak2.position.x) && (vak1.position.y === vak2.position.y);
+    let verticaleBuur = (vak1.position.y+1 === vak2.position.y || vak1.position.y -1 === vak2.position.y) && (vak1.position.x === vak2.position.x);
+
+    return (horizontaleBuur || verticaleBuur);
 }
