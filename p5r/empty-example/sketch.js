@@ -11,6 +11,9 @@ let random;
 let aantalRijen = 8;
 let aantalKolommen = 8;
 let gridGap = 10;
+let vak1 = null;
+let vak2 = null;
+
 
 function setup() {
   // put setup code here
@@ -44,7 +47,7 @@ function draw() {
 			let y = positionInPixels(rij);
 			fill(grid[rij][kolom].kleur)
 			if (grid[rij][kolom].actief){
-				strokeWeight(3);
+				strokeWeight(10);
 				stroke(51);
 			}
 			else{
@@ -59,20 +62,52 @@ function positionInPixels(rijOfKolom){
 	return rijOfKolom*(lengteCel+gridGap)+lengteCel;
 }
 
+
+// eerst zijn vak1 en vak2 === null
+// bij mousePressed wordt eerst vak1 gevuld, dan vak2
+// als de twee vakken gevuld zijn, wordt er geswapt
+// swap moet vak1 en vak 2 weer resetten naar null
 function mousePressed(){
 	for(let rij=0; rij<aantalRijen; rij++){
 		for(let kolom=0; kolom<aantalKolommen; kolom++){
             if ((mouseX > positionInPixels(kolom) && mouseX < positionInPixels(kolom)+lengteCel) && (mouseY > positionInPixels(rij) && mouseY < positionInPixels(rij)+lengteCel)){
-            	grid[rij][kolom].actief = true;
+
+				if (vak1 === null){
+					vak1 = {kolom:kolom, rij:rij};
+				}
+				else if (vak2 === null) {
+                    vak2 = {kolom:kolom, rij:rij};
+                }
+                grid[rij][kolom].actief = true;
+                if (vak2 !== null){
+                    swap(grid);
+                }
+
 			}
 		}
 	}
 
-}
 
-function isBuur(grid, vak1,vak2){
-    let horizontaleBuur = (vak1.position.x+1 === vak2.position.x || vak1.position.x -1 === vak2.position.x) && (vak1.position.y === vak2.position.y);
-    let verticaleBuur = (vak1.position.y+1 === vak2.position.y || vak1.position.y -1 === vak2.position.y) && (vak1.position.x === vak2.position.x);
+}
+// vak1 is bijvoorbeeld grid[0][1]
+function isBuur(){
+	let a = grid[vak1.rij][vak1.kolom];
+	let b = grid[vak2.rij][vak2.kolom];
+    let horizontaleBuur = (a.position.x+1 === b.position.x || a.position.x -1 === b.position.x) && (a.position.y === b.position.y);
+    let verticaleBuur = (a.position.y+1 === b.position.y || a.position.y -1 === b.position.y) && (a.position.x === b.position.x);
 
     return (horizontaleBuur || verticaleBuur);
+}
+
+function swap(){
+	if (isBuur()){
+		let temp = grid[vak1.rij][vak1.kolom];
+		grid[vak1.rij][vak1.kolom] = grid[vak2.rij][vak2.kolom];
+		grid[vak2.rij][vak2.kolom] = temp;
+
+	}
+	grid[vak1.rij][vak1.kolom].actief = false;
+	grid[vak2.rij][vak2.kolom].actief = false;
+	vak1 = null;
+	vak2 = null;
 }
