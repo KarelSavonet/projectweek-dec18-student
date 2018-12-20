@@ -7,6 +7,8 @@ let green;
 let red;
 let aantalKleuren = 4;
 let random;
+let aantalRijen = 8;
+let aantalKolommen = 8;
 
 function setup() {
   // put setup code here
@@ -18,10 +20,10 @@ function setup() {
 	let kleuren = [blue,yellow,green,red];
     createCanvas(600,600);
     background(200);
-    grid = new Array(10);
-    for (let rij = 0; rij<10; rij++){
-        grid[rij] = new Array(5);
-		for (let kolom=0; kolom<5; kolom++){
+    grid = new Array(aantalRijen);
+    for (let rij = 0; rij<aantalRijen; rij++){
+        grid[rij] = new Array(aantalKolommen);
+		for (let kolom=0; kolom<aantalKolommen; kolom++){
 			random = Math.floor(aantalKleuren*Math.random());
 			grid[rij][kolom] = kleuren[random];
 		}
@@ -31,13 +33,13 @@ function setup() {
 function draw() {
   // put drawing code here
 
-    for (let rij = 0; rij<10; rij++){
-        for (let kolom=0; kolom<5; kolom++){
-			let x = kolom*60+50;
-			let y = rij*60+50;
+    for (let rij = 0; rij<aantalKolommen; rij++){
+        for (let kolom=0; kolom<aantalKolommen; kolom++){
+			let x = kolom*(lengteCel+10)+lengteCel;
+			let y = rij*(lengteCel+10)+lengteCel;
 			fill(grid[rij][kolom])
 			stroke(0);
-			rect(x+50,y+50,lengteCel,lengteCel);
+			rect(x,y,lengteCel,lengteCel);
 
 		}
     }
