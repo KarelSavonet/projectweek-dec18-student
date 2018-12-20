@@ -9,6 +9,7 @@ let aantalKleuren = 4;
 let random;
 let aantalRijen = 8;
 let aantalKolommen = 8;
+let gridGap = 10;
 
 function setup() {
   // put setup code here
@@ -28,6 +29,8 @@ function setup() {
 			grid[rij][kolom] = kleuren[random];
 		}
     }
+
+
 }
 
 function draw() {
@@ -35,8 +38,8 @@ function draw() {
 
     for (let rij = 0; rij<aantalKolommen; rij++){
         for (let kolom=0; kolom<aantalKolommen; kolom++){
-			let x = kolom*(lengteCel+10)+lengteCel;
-			let y = rij*(lengteCel+10)+lengteCel;
+			let x = kolom*(lengteCel+gridGap)+lengteCel;
+			let y = rij*(lengteCel+gridGap)+lengteCel;
 			fill(grid[rij][kolom])
 			stroke(0);
 			rect(x,y,lengteCel,lengteCel);
