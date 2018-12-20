@@ -107,13 +107,19 @@ function swap(){
 		let temp = grid[vak1.rij][vak1.kolom].kleur;
 		grid[vak1.rij][vak1.kolom].kleur = grid[vak2.rij][vak2.kolom].kleur;
 		grid[vak2.rij][vak2.kolom].kleur = temp;
-		console.log(horizontalChainAt(vak1));
+		maakChainsLeeg();
 	}
+	console.log("horizontal op vak1 = ",horizontalChainAt(vak1))
+    console.log("horizontal op vak2 = ",horizontalChainAt(vak2))
+    console.log("verticaal op vak1 = ",verticalChainAt(vak1))
+    console.log("verticaal op vak2 = ",verticalChainAt(vak2))
+
 	grid[vak1.rij][vak1.kolom].actief = false;
 	grid[vak2.rij][vak2.kolom].actief = false;
 	vak1 = null;
 	vak2 = null;
 	background(200);
+
 }
 
 
@@ -135,6 +141,7 @@ function horizontalChainAt(vak){
     	i++;
 	}
 
+	i=1;
 
 	while(vak.kolom-i >= 0 && grid[vak.rij][vak.kolom-i].kleur === kleurVak){
     	ketting++;
@@ -142,4 +149,96 @@ function horizontalChainAt(vak){
 	}
 
     return ketting;
+}
+
+function verticalChainAt(vak){
+    let kleurVak = grid[vak.rij][vak.kolom].kleur;
+    let ketting = 1;
+    let i = 1;
+    while(vak.rij+i < breedte() && grid[vak.rij+i][vak.kolom].kleur === kleurVak){
+        ketting++;
+        i++;
+    }
+    i=1;
+    while(vak.rij-i >= 0 && grid[vak.rij-i][vak.kolom].kleur === kleurVak){
+        ketting++;
+        i++;
+    }
+    return ketting;
+}
+
+function maakChainsLeegAt(vak){
+
+    let res = {};
+    let tobedeleted = [];
+    for (let rij = 0; rij<hoogte(); rij++){
+        for (let kolom = 0; kolom<breedte(); kolom++){
+            let lengtehorizontaal = horizontalChainAt({kolom:kolom,rij:rij});
+            if (lengtehorizontaal>=3){
+                let teller = 0;
+                teller += lengtehorizontaal;
+                let kleur = grid[rij][kolom].kleur;
+                for (let i=0; i<lengtehorizontaal; i++){
+                    tobedeleted.push({kolom:kolom+i,rij:rij});
+                }
+                if (kleur in res){
+                    res[kleur] += teller;
+                }
+                else{
+                    res[kleur] = teller;
+                }
+                kolom += lengtehorizontaal;
+            }
+        }
+    }
+
+    for (let kolom=0; kolom<hoogte(); kolom++){
+        for (let rij=0; rij<breedte(); rij++){
+            let lengteverticaal = verticalChainAt({kolom:kolom,rij:rij});
+            if (lengteverticaal>=3){
+                let teller = 0;
+                teller += lengteverticaal;
+                let kleur = grid[rij][kolom].kleur;
+                for (let i=0; i<lengteverticaal; i++){
+                    tobedeleted.push({kolom:kolom,rij:rij+i});
+                }
+                if (kleur in res){
+                    res[kleur] += teller;
+                }
+                else{
+                    res[kleur] = teller;
+                }
+                rij += lengteverticaal;
+            }
+        }
+    }
+
+
+    for (let el of tobedeleted){
+    	console.log("rij",el.rij,"kolom",el.kolom);
+        //grid[el.rij][el.kolom].kleur = leeg;
+        grid[0][0].kleur = leeg;
+    }
+
+    return res;
+}
+
+function collapse(grid){
+
+    let sorted = false;
+    while(!sorted) {
+        sorted = true;
+
+        for (let k = 0; k<breedte(grid);k++) {
+            for (let i = 0; i < hoogte(grid) - 1; i++) {
+                if (grid[i][k].kleur !== leeg && grid[i + 1][k].kleur === leeg) {
+                    let temp = grid[i][k].kleur;
+                    grid[i][k].kleur = grid[i+1][k].kleur;
+                    grid[i+1][k].kleur = temp;
+                    sorted = false;
+                }
+            }
+        }
+    }
+
 }
