@@ -32,7 +32,7 @@ function setup() {
 	kleuren = [blue,yellow,green,red,orange,purple];
 	aantalKleuren = kleuren.length;
     canvas = createCanvas(aantalKolommen*(lengteCel+gridGap)-gridGap+2*lengteCel,aantalKolommen*(lengteCel+gridGap)-gridGap+2*lengteCel);
-    canvas.position((windowWidth - width) /2, (windowHeight - height)/2);
+    canvas.position((windowWidth - width) /2, (windowHeight - height)/2 +100);
     background(200);
     grid = new Array(aantalRijen);
     for (let rij = 0; rij<aantalRijen; rij++){
