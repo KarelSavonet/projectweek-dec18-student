@@ -15,6 +15,7 @@ let aantalKolommen = 8;
 let gridGap = 10;
 let vak1 = null;
 let vak2 = null;
+let canvas;
 
 
 function setup() {
@@ -29,7 +30,8 @@ function setup() {
 	leeg = color(255,255,255);
 	kleuren = [blue,yellow,green,red,orange,purple];
 	aantalKleuren = kleuren.length;
-    createCanvas(600,600);
+    canvas = createCanvas(aantalKolommen*(lengteCel+gridGap)-gridGap+2*lengteCel,aantalKolommen*(lengteCel+gridGap)-gridGap+2*lengteCel);
+    canvas.position((windowWidth - width) /2, (windowHeight - height)/2);
     background(200);
     grid = new Array(aantalRijen);
     for (let rij = 0; rij<aantalRijen; rij++){
@@ -42,6 +44,9 @@ function setup() {
 			grid[rij][kolom].actief = false;
 		}
     }
+    vervangChainsDoorRandoms(grid);
+
+
 }
 
 function draw() {
@@ -85,15 +90,19 @@ function mousePressed(){
                 }
                 grid[rij][kolom].actief = true;
                 if (vak2 !== null){
+                    setTimeout(function(){een()},2000)
                     swap(grid);
                 }
 
 			}
 		}
 	}
-
-
 }
+
+function een(){
+    return 1;
+}
+
 // vak1 is bijvoorbeeld grid[0][1]
 function isBuur(){
 	let a = grid[vak1.rij][vak1.kolom];
@@ -245,4 +254,28 @@ function vulLegeVakken(){
 			grid[rij][kolom].kleur = kleuren[Math.floor(Math.random()*aantalKleuren)];
 		}
 	}
+}
+
+function vervangChainsDoorRandoms(grid){
+
+    let sorted= false;
+    while (!sorted) {
+        sorted = true;
+        for (let kolom = 0; kolom < hoogte(grid); kolom++) {
+            for (let rij = 0; rij < breedte(grid); rij++) {
+                if (horizontalChainAt({kolom: kolom, rij: rij}) >= 3) {
+                    console.log("er was nen horizontale ze!");
+                    grid[rij][kolom].kleur = kleuren[Math.floor(Math.random()*4)];
+                    sorted = false;
+
+                }
+                if (verticalChainAt({kolom: kolom, rij: rij}) >= 3) {
+                    console.log("Rip verticale chain!");
+                    grid[rij][kolom].kleur = kleuren[Math.floor(Math.random()*4)];
+                    sorted = false;
+                }
+            }
+        }
+    }
+    console.log("While is gedaan");
 }
