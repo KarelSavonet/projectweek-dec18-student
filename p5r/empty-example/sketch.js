@@ -16,6 +16,7 @@ let gridGap = 10;
 let vak1 = null;
 let vak2 = null;
 let canvas;
+let score = 0;
 
 
 function setup() {
@@ -66,6 +67,10 @@ function draw() {
 			rect(x,y,lengteCel,lengteCel);
 		}
     }
+    textSize(30);
+    fill(0);
+    text("Score: "+score,10,30);
+
 }
 
 function positionInPixels(rijOfKolom){
@@ -128,6 +133,7 @@ function swap(){
 		let p = maakChainsLeegAt(vak2);
 		console.log("aantal witte vakjes die verschijnen door chains op vak 1 = ", o);
 		console.log("aantal witte vakjes die verschijnen door chains op vak 2 = ", p);
+		score += o+p;
 	}
 	console.log("horizontal op vak1 = ",horizontalChainAt(vak1))
     console.log("horizontal op vak2 = ",horizontalChainAt(vak2))
