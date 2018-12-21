@@ -131,23 +131,14 @@ function swap(){
         }
 		let o = maakChainsLeegAt(vak1);
 		let p = maakChainsLeegAt(vak2);
-		console.log("aantal witte vakjes die verschijnen door chains op vak 1 = ", o);
-		console.log("aantal witte vakjes die verschijnen door chains op vak 2 = ", p);
 		score += o+p;
 	}
-	console.log("horizontal op vak1 = ",horizontalChainAt(vak1))
-    console.log("horizontal op vak2 = ",horizontalChainAt(vak2))
-    console.log("verticaal op vak1 = ",verticalChainAt(vak1))
-    console.log("verticaal op vak2 = ",verticalChainAt(vak2))
-
 	grid[vak1.rij][vak1.kolom].actief = false;
 	grid[vak2.rij][vak2.kolom].actief = false;
 	vak1 = null;
 	vak2 = null;
 	background(200);
-
 }
-
 
 function breedte(){
 	return grid[0].length;
@@ -263,25 +254,21 @@ function vulLegeVakken(){
 }
 
 function vervangChainsDoorRandoms(grid){
-
     let sorted= false;
     while (!sorted) {
         sorted = true;
         for (let kolom = 0; kolom < hoogte(grid); kolom++) {
             for (let rij = 0; rij < breedte(grid); rij++) {
                 if (horizontalChainAt({kolom: kolom, rij: rij}) >= 3) {
-                    console.log("er was nen horizontale ze!");
                     grid[rij][kolom].kleur = kleuren[Math.floor(Math.random()*4)];
                     sorted = false;
 
                 }
                 if (verticalChainAt({kolom: kolom, rij: rij}) >= 3) {
-                    console.log("Rip verticale chain!");
                     grid[rij][kolom].kleur = kleuren[Math.floor(Math.random()*4)];
                     sorted = false;
                 }
             }
         }
     }
-    console.log("While is gedaan");
 }
